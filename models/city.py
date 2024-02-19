@@ -19,3 +19,12 @@ class City(BaseModel):
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     state = relationship("State", back_populates="cities")
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initializes a new instance of City
+
+        Args:
+            **kwargs: Arbitrary keyword arguments
+        """
+        super().__init__(*args, **kwargs)

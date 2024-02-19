@@ -4,6 +4,7 @@ Module containing the BaseModel class
 """
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 import models
@@ -15,10 +16,13 @@ class BaseModel(Base):
     BaseModel class that defines common attributes/methods
     for other classes
     """
-    __tablename__ = 'base_models'  # Add this line to specify the table name
+    __tablename__ = 'base_models'
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
+    state = relationship("State", back_populates="base_model")
+    cities = relationship("City", back_populates="state")
 
     def __init__(self, *args, **kwargs):
         """
