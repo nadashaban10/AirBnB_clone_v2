@@ -2,21 +2,20 @@
 """
 Module containing the BaseModel class
 """
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 import models
 
 Base = declarative_base()
 
-
-class BaseModel:
+class BaseModel(Base):
     """
     BaseModel class that defines common attributes/methods
     for other classes
     """
+    __tablename__ = 'base_models'  # Add this line to specify the table name
     id = Column(String(60), unique=True, nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())

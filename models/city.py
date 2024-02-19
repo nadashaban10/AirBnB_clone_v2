@@ -12,8 +12,8 @@ class City(BaseModel):
     """Represents a city.
 
     Attributes:
-        state_id (str): The ID of the state to which the city belongs.
         name (str): The name of the city.
+        state_id (str): The state id.
     """
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)

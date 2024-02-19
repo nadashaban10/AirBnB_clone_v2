@@ -8,6 +8,7 @@ import sys
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.engine.db_storage import DBStorage
 from models.user import User
 from models.place import Place
 from models.state import State
