@@ -48,7 +48,10 @@ class DBStorage:
         else:
             for class_obj in classes:
                 objects.extend(self.__session.query(class_obj).all())
-        return {"{}.{}".format(type(obj).__name__, obj.id): obj for obj in objects}
+        return {
+            "{}.{}".format(type(obj).__name__, obj.id): obj
+            for obj in objects
+        }
 
     def new(self, obj):
         """

@@ -6,6 +6,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import models
 
+
 class State(BaseModel, Base):
     """Represents a state for a MySQL database.
 
@@ -33,4 +34,12 @@ class State(BaseModel, Base):
     # Add a custom __str__ method
     def __str__(self):
         """Return a string representation of the State object."""
-        return "[State] ({}) {}".format(self.id, {'name': self.name, 'id': self.id, 'updated_at': self.updated_at, 'created_at': self.created_at})
+        return "[State] ({}) {}".format(
+            self.id,
+            {
+                'name': self.name,
+                'id': self.id,
+                'updated_at': self.updated_at,
+                'created_at': self.created_at
+            }
+        )

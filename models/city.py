@@ -5,13 +5,14 @@ from models.base_model import Base, BaseModel
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+
 class City(BaseModel, Base):
     """City class representing a city in the database.
 
     Attributes:
         __tablename__ (str): Name of the MySQL table for City objects.
         name (sqlalchemy String): Name of the city.
-        state_id (sqlalchemy String): ID of the state to which the city belongs.
+        state_id (sqlalchemy String): ID of the state to which city.
         places (sqlalchemy relationship): Relationship to the Place model.
     """
     __tablename__ = "cities"
