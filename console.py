@@ -60,16 +60,46 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Create a new instance of a specified class."""
+        """
+        Create a new instance of a specified class with given parameters.
+
+        Usage: create <Class name> <param 1> <param 2> <param 3>...
+        """
         args = arg.split()
-        if not args:
-            print("** class name missing **")
-        elif args[0] not in current_classes:
-            print("** class doesn't exist **")
-        else:
-            new_instance = current_classes[args[0]]()
-            new_instance.save()
-            print(new_instance.id)
+        if not args or args[0] not in current_classes:
+            print(
+                "** class name missing **" if not args
+                else "** class doesn't exist **"
+            )
+            return
+
+        new_instance = current_classes[args[0]]()
+
+        if len(args) > 1:
+            # Extract and parse parameters
+            params = args[1:]
+            for param in params:
+                try:
+                    key, value = param.split('=')
+                    key = key.strip()
+                    value = value.strip('"')
+
+                    # Replace underscores with spaces for string values
+                    if isinstance(value, str):
+                        value = value.replace('_', ' ')
+
+                    # Check the type of the attribute and set accordingly
+                    if '.' in value:
+                        setattr(new_instance, key, float(value))
+                    elif value.isdigit():
+                        setattr(new_instance, key, int(value))
+                    else:
+                        setattr(new_instance, key, value)
+                except ValueError:
+                    print(f"Skipping invalid parameter: {param}")
+
+        new_instance.save()
+        print(new_instance.id)
 
     def do_show(self, arg):
         """Prints the string representation of an instance
@@ -163,7 +193,6 @@ class HBNBCommand(cmd.Cmd):
         else:
             instance = instance_objs[obj_key]
             attribute_name = args[2]
-            # attribute_value = args[3].strip('"')
             attribute_value = ' '.join(args[3:]).strip('"')
 
             if hasattr(instance, attribute_name):
