@@ -32,13 +32,22 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """
-        Returns the dictionary __objects
+        Returns a dictionary of objects filtered by class type.
+
+        Args:
+            cls: The class type to filter by.
 
         Returns:
-            dict: Dictionary of all objects
+            dict: Dictionary of objects of the specified class type.
         """
+        if cls:
+            return {
+                k: v
+                for k, v in self.__objects.items()
+                if isinstance(v, cls)
+            }
         return self.__objects
 
     def new(self, obj):
@@ -87,3 +96,16 @@ class FileStorage:
                                 self.__objects[key] = obj_instance
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """
+        Deletes the specified object from __objects.
+
+        Args:
+            obj: Object to be deleted.
+        """
+        if obj:
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            if key in self.__objects:
+                del self.__objects[key]
+                self.save()
