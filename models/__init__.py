@@ -3,14 +3,18 @@
 __init__.py: Package initializer
 
 Description:
-    - Initializes the package with a FileStorage instance
-    from the models.engine module.
+    - Initializes the package with either a FileStorage or DBStorage instance
+      based on the value of the environment variable HBNB_TYPE_STORAGE.
     - It triggers a reload operation, loading existing data
-    from file.json into memory.
+      from the database or file.json into memory.
 """
 
+import os
+from models.engine import file_storage, db_storage
 
-from models.engine import file_storage
+if os.getenv("HBNB_TYPE_STORAGE") == "db":
+    storage = db_storage.DBStorage()
+else:
+    storage = file_storage.FileStorage()
 
-storage = file_storage.FileStorage()
 storage.reload()

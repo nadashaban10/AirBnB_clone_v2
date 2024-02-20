@@ -1,15 +1,18 @@
 #!/usr/bin/python3
-"""Defines the `Amenity` class.
+"""Module defining the Amenity class."""
 
-Sub-classes the `BaseModel` class.
-"""
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
-
-class Amenity(BaseModel):
-    """Represents an amenity.
+class Amenity(BaseModel, Base):
+    """Amenity class representing an amenity in the database.
 
     Attributes:
-        name (str): The name of the amenity.
+        __tablename__ (str): Name of the MySQL table for Amenity objects.
+        name (sqlalchemy String): Name of the amenity.
+        place_amenities (sqlalchemy relationship): Relationship with Place objects.
     """
-    name = ""
+    __tablename__ = "amenities"
+    name = Column(String(128), nullable=False)
+    place_amenities = relationship("Place", secondary="place_amenity", viewonly=False, overlaps="amenities")
