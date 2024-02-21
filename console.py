@@ -156,12 +156,13 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         all_objs = storage.all()
 
-        if not args:
-            print(["[{}] ({}) {}".format(type(v).__name__, k, v) for k, v in all_objs.items()])
+        if len(args) < 1:
+            print(["{}".format(str(v)) for _, v in all_objs.items()])
         elif args[0] not in current_classes:
             print("** class doesn't exist **")
         else:
-            print(["[{}] ({}) {}".format(args[0], k, v) for k, v in all_objs.items() if type(v).__name__ == args[0]])
+            print(["{}".format(str(v))
+                  for _, v in all_objs.items() if type(v).__name__ == args[0]])
 
     def do_update(self, arg):
         """
