@@ -26,7 +26,7 @@ class User(BaseModel, Base):
     places = relationship("Place", backref="user", cascade="delete")
     reviews = relationship("Review", backref="user", cascade="delete")
 
-    def __repr__(self):
+    def __str__(self):
         """String representation of the User object."""
         return "[User] ({}) {}".format(self.id, {
             'updated_at': self.updated_at,

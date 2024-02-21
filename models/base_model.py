@@ -59,10 +59,12 @@ class BaseModel:
         Returns:
             str: String representation of the object
         """
+        custom_attrs = {key: getattr(self, key) for key in vars(self) if not key.startswith('_')}
         return "[{}] ({}) {}".format(
-                                    self.__class__.__name__,
-                                    self.id,
-                                    self.__dict__)
+            self.__class__.__name__,
+            self.id,
+            custom_attrs
+        )
 
     def save(self):
         """
