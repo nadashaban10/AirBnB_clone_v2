@@ -6,6 +6,7 @@ interpreter for the AirBnB console.
 
 import sys
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -63,47 +64,43 @@ class HBNBCommand(cmd.Cmd):
         """
         Create a new instance of a specified class with given parameters.
 
-        Usage: create <Class name> <param 1> <param 2> <param 3>...
+        Usage: create <Class name> <key1=value1> <key2=value2> ...
         """
-        args = arg.split()
-        if not args or args[0] not in current_classes:
-            print(
-                "** class name missing **" if not args
-                else "** class doesn't exist **"
-            )
-            return
+        try:
+            if not arg:
+                raise SyntaxError("** class name missing **")
 
-        new_instance = current_classes[args[0]]()
+            class_name, *attributes = arg.split()
+            if not class_name:
+                raise SyntaxError("** class name missing **")
 
-        if len(args) > 1:
-            # Extract and parse parameters
-            param_start = arg.find("(")
-            param_end = arg.find(")")
-            param_str = arg[param_start+1:param_end]
-            param_str = param_str.replace('"', '').replace("'", "")
-            params = param_str.split(',')
-            for param in params:
-                try:
-                    key, value = param.split('=')
-                    key = key.strip()
-                    value = value.strip()
-
-                    # Replace underscores with spaces for string values
-                    if isinstance(value, str):
-                        value = value.replace('_', ' ')
-
-                    # Check the type of the attribute and set accordingly
-                    if '.' in value:
-                        setattr(new_instance, key, float(value))
-                    elif value.isdigit():
-                        setattr(new_instance, key, int(value))
+            kwargs = {}
+            for attribute in attributes:
+                match = re.match(r'(\w+)=(\S+)', attribute)
+                if match:
+                    key, value = match.groups()
+                    if value[0] == '"' and value[-1] == '"':
+                        value = value[1:-1].replace('_', ' ')
                     else:
-                        setattr(new_instance, key, value)
-                except ValueError:
-                    print(f"Skipping invalid parameter: {param}")
+                        try:
+                            value = eval(value)
+                        except (SyntaxError, NameError):
+                            continue
+                    kwargs[key] = value
 
-        new_instance.save()
-        print(new_instance.id)
+            if kwargs == {}:
+                obj = current_classes[class_name]()
+            else:
+                obj = current_classes[class_name](**kwargs)
+                storage.new(obj)
+
+            print(obj.id)
+            obj.save()
+
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
+            print("** class doesn't exist **")
 
     def do_show(self, arg):
         """Prints the string representation of an instance
@@ -159,13 +156,12 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         all_objs = storage.all()
 
-        if len(args) < 1:
-            print(["{}".format(str(v)) for _, v in all_objs.items()])
+        if not args:
+            print(["[{}] ({}) {}".format(type(v).__name__, k, v) for k, v in all_objs.items()])
         elif args[0] not in current_classes:
             print("** class doesn't exist **")
         else:
-            print(["{}".format(str(v))
-                  for _, v in all_objs.items() if type(v).__name__ == args[0]])
+            print(["[{}] ({}) {}".format(args[0], k, v) for k, v in all_objs.items() if type(v).__name__ == args[0]])
 
     def do_update(self, arg):
         """
