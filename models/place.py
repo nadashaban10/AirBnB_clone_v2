@@ -3,10 +3,17 @@
 
 import os
 from models.base_model import Base, BaseModel
+from models.review import Review
 from models.amenity import Amenity
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
+# Define the association table for the many-to-many relationship
+place_amenity = Table(
+    'place_amenity', Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+)
 
 class Place(BaseModel, Base):
     """Place class representing a place in the database.
@@ -40,6 +47,8 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     reviews = relationship("Review", backref="place", cascade="delete")
     amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
+    amenity_ids = []
+    amenity_list = []
 
     if os.getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
