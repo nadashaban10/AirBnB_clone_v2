@@ -46,6 +46,7 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", backref="place", cascade="delete")
     amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     amenity_ids = []
+    amenity_list = []
 
     if os.getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
@@ -56,12 +57,12 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Get/set linked Amenities."""
-            return [amenity for amenity in models.storage.all(Amenity).values() if amenity.id in self.amenity_ids]
+            return [amenity for amenity in models.storage.all(Amenity).values() if amenity.id in self.amenity_list]
 
         @amenities.setter
         def amenities(self, value):
             if isinstance(value, Amenity):
-                self.amenity_ids.append(value.id)
+                self.amenity_list.append(value.id)
 
     def __str__(self):
         """
