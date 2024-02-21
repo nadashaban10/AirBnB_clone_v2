@@ -24,7 +24,3 @@ class User(BaseModel, Base):
     last_name = Column(String(128))
     places = relationship("Place", backref="user", cascade="delete")
     reviews = relationship("Review", backref="user", cascade="delete")
-
-    def __str__(self):
-        """String representation of the User object."""
-        return "[User] ({}) {}".format(self.id, str(self.to_dict()))

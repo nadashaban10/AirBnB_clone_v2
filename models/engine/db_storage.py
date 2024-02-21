@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import BaseModel, Base
 from models.city import City
 from models.state import State
+from models.user import User
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
@@ -39,7 +40,7 @@ class DBStorage:
         Query on the current database session (self.__session)
         all objects depending on the class name (argument cls)
         """
-        classes = [State, City, Amenity, Place, Review]
+        classes = [State, City, User, Amenity, Place, Review]
         objects = []
         if cls:
             if isinstance(cls, str):
