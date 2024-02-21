@@ -62,3 +62,32 @@ class Place(BaseModel, Base):
         def amenities(self, value):
             if isinstance(value, Amenity):
                 self.amenity_ids.append(value.id)
+
+        def __str__(self):
+            """
+            Returns a string representation of the Place object
+
+            Returns:
+                str: String representation of the object
+            """
+            custom_attrs = {
+                'latitude': self.latitude,
+                'city_id': self.city_id,
+                'price_by_night': self.price_by_night,
+                'id': self.id,
+                'user_id': self.user_id,
+                'max_guest': self.max_guest,
+                'created_at': self.created_at,
+                'description': self.description,
+                'number_rooms': self.number_rooms,
+                'longitude': self.longitude,
+                'number_bathrooms': self.number_bathrooms,
+                'name': self.name,
+                'updated_at': self.updated_at
+            }
+
+            return "[{}] ({}) {}".format(
+                self.__class__.__name__,
+                self.id,
+                custom_attrs
+            )
