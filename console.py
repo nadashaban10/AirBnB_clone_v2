@@ -77,12 +77,16 @@ class HBNBCommand(cmd.Cmd):
 
         if len(args) > 1:
             # Extract and parse parameters
-            params = args[1:]
+            param_start = arg.find("(")
+            param_end = arg.find(")")
+            param_str = arg[param_start+1:param_end]
+            param_str = param_str.replace('"', '').replace("'", "")
+            params = param_str.split(',')
             for param in params:
                 try:
                     key, value = param.split('=')
                     key = key.strip()
-                    value = value.strip('"')
+                    value = value.strip()
 
                     # Replace underscores with spaces for string values
                     if isinstance(value, str):
