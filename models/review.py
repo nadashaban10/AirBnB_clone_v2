@@ -18,3 +18,25 @@ class Review(BaseModel, Base):
     text = Column(String(1024), nullable=False)
     place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
+
+    def __str__(self):
+        """
+        Returns a string representation of the Review object
+
+        Returns:
+            str: String representation of the object
+        """
+        custom_attrs = {
+            'text': self.text,
+            'place_id': self.place_id,
+            'id': self.id,
+            'updated_at': self.updated_at,
+            'created_at': self.created_at,
+            'user_id': self.user_id
+        }
+
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            custom_attrs
+        )
