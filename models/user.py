@@ -5,6 +5,7 @@ from models.base_model import Base, BaseModel
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
+
 class User(BaseModel, Base):
     """User class representing a user in the database.
 
@@ -24,3 +25,15 @@ class User(BaseModel, Base):
     last_name = Column(String(128))
     places = relationship("Place", backref="user", cascade="delete")
     reviews = relationship("Review", backref="user", cascade="delete")
+
+    def __repr__(self):
+        """String representation of the User object."""
+        return "[User] ({}) {}".format(self.id, {
+            'updated_at': self.updated_at,
+            'id': self.id,
+            'last_name': self.last_name,
+            'first_name': self.first_name,
+            'email': self.email,
+            'created_at': self.created_at,
+            'password': self.password
+        })
