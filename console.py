@@ -79,8 +79,13 @@ class HBNBCommand(cmd.Cmd):
                 match = re.match(r'(\w+)=(\S+)', attribute)
                 if match:
                     key, value = match.groups()
-                    if value[0] == '"' and value[-1] == '"':
-                        value = value[1:-1].replace('_', ' ')
+                    # Handle escaped double quotes
+                    if value.startswith('"') and value.endswith('"'):
+                        value = (
+                            value[1:-1]
+                            .replace('_', ' ')
+                            .replace('\\"', '"')
+                        )
                     else:
                         try:
                             value = eval(value)
