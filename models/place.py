@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 """Module defining the Place class."""
 
+import models
+from models.amenity import Amenity
 import os
+from os import getenv
 from models.base_model import Base, BaseModel
 from models.review import Review
-from models.amenity import Amenity
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
@@ -46,24 +48,31 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     reviews = relationship("Review", backref="place", cascade="delete")
-    amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
+    amenities = relationship("Amenity", secondary="place_amenity", viewonly=False)
     amenity_ids = []
-    amenity_list = []
 
-    if os.getenv("HBNB_TYPE_STORAGE", None) != "db":
+    if getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
         def reviews(self):
             """Get a list of all linked Reviews."""
-            return [review for review in models.storage.all(Review).values() if review.place_id == self.id]
+            review_list = []
+            for review in list(models.storage.all(Review).values()):
+                if review.place_id == self.id:
+                    review_list.append(review)
+            return review_list
 
         @property
         def amenities(self):
             """Get/set linked Amenities."""
-            return [amenity for amenity in models.storage.all(Amenity).values() if amenity.id in self.amenity_ids]
+            amenity_list = []
+            for amenity in list(models.storage.all(Amenity).values()):
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
 
         @amenities.setter
         def amenities(self, value):
-            if isinstance(value, Amenity):
+            if type(value) == Amenity:
                 self.amenity_ids.append(value.id)
 
     def __str__(self):
