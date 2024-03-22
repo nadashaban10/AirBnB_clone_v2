@@ -22,7 +22,7 @@ def hbnb():
 def after_text():
     """Starts a Flask application"""
     text = text.replace('_', ' ')
-    return 'C {}'.format(text)
+    return 'C is {}'.format(text)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
