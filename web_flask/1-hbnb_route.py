@@ -15,7 +15,7 @@ def hello_bnb():
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """Starts a Flask application"""
-    return 'HBNB!'
+    return 'HBNB'
 
 
 if __name__ == '__main__':
