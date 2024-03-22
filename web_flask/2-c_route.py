@@ -19,10 +19,10 @@ def hbnb():
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def after_text():
+def after_text(text):
     """Starts a Flask application"""
-    text = text.replace('_', ' ')
-    return 'C is {}'.format(text)
+    Text = text.replace('_', ' ')
+    return 'C is {}'.format(Text)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
