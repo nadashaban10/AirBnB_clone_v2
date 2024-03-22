@@ -19,7 +19,7 @@ def hbnb():
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def after_text():
+def after_text(text):
     """Starts a Flask application"""
     text = text.replace('_', ' ')
     return 'C {}'.format(text)
@@ -28,8 +28,8 @@ def after_text():
 @app.route('/c/python/<text>', strict_slashes=False)
 def after_python_text(text):
     """Starts a Flask application"""
-    Text = text.replace('_', ' ')
-    return 'Python is {}'.format(Text)
+    text = text.replace('_', ' ')
+    return 'Python is {}'.format(text)
 
 
 if __name__ == '__main__':
