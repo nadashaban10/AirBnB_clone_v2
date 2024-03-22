@@ -24,11 +24,13 @@ def after_text():
     text = text.replace('_', ' ')
     return 'C {}'.format(text)
 
+
 @app.route('/c/python/<text>', strict_slashes=False)
 def after_python_text():
     """Starts a Flask application"""
     text = text.replace('_', ' ')
     return 'Python is {}'.format(text)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
