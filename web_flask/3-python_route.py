@@ -25,11 +25,11 @@ def after_text(text):
     return 'C {}'.format(text)
 
 
-@app.route('/c/python/<text>', strict_slashes=False)
-def after_python_text(text):
+@app.route('/python/<text>', strict_slashes=False)
+def after_python_text(text='is cool'):
     """Starts a Flask application"""
     text = text.replace('_', ' ')
-    return 'Python is {}'.format(text)
+    return 'Python {}'.format(text)
 
 
 if __name__ == '__main__':
