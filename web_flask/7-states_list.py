@@ -7,18 +7,15 @@ from models.state import State
 app = Flask(__name__)
 
 
-@app.route("/states_list", strict_slashes=False)
-def state():
-    """Starts a Flask application"""
-    list_state = storage.all(State).values()
-    return render_template('7-states_list.html', list=list_state)
-
+@app.route('/states_list', strict_slashes=False)
+def states_list():
+    states = storage.all("State").values()
+    sorted_states = sorted(states, key=lambda state: state.name)
+    return render_template('states_list.html', states=sorted_states)
 
 @app.teardown_appcontext
-def teardown_db(execption):
-    """Remove the current SQLAlchemy Session"""
+def close_session(exception=None):
     storage.close()
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

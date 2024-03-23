@@ -89,3 +89,5 @@ class DBStorage:
         Closes the working SQLAlchemy session.
         """
         self.__session.close()
+
+    
